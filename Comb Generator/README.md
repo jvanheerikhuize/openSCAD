@@ -11,6 +11,19 @@ A fully parametric 3D comb generator. Adjust the spine, teeth count, spacing, an
 - **Cross-section view** — slice the model in half to inspect tooth and spine geometry
 - **Full parameter validation** — assertions catch invalid configurations before rendering
 
+## 💇 Hair Type Presets
+
+Quickly generate combs optimized for different hair types without manually tweaking parameters:
+
+| Preset | tooth_width | tooth_gap | tooth_length | num_teeth | Best For |
+| :--- | ---: | ---: | ---: | ---: | :--- |
+| **Custom** | _(manual)_ | _(manual)_ | _(manual)_ | _(manual)_ | Full control over all parameters |
+| **Fine / Thin** | 1.0 mm | 1.0 mm | 20 mm | 55 | Fine, delicate hair that needs gentle styling |
+| **Normal / Straight** | 1.5 mm | 1.5 mm | 25 mm | 45 | Everyday use; balanced geometry |
+| **Thick / Coarse** | 2.0 mm | 3.0 mm | 30 mm | 25 | Dense, coarse hair that needs wider spacing |
+| **Curly / Wavy** | 3.0 mm | 6.0 mm | 40 mm | 12 | Curls and waves; wide-tooth detangling comb |
+| **Long / Detangling** | 2.0 mm | 4.0 mm | 50 mm | 20 | Long hair; extra-long teeth for deep detangling |
+
 ## 🚀 How to Use
 
 1. Download and install [OpenSCAD](https://openscad.org/) if you don't have it.
@@ -22,6 +35,12 @@ A fully parametric 3D comb generator. Adjust the spine, teeth count, spacing, an
 > **Tip:** Keep `preview_mode = true` while designing for faster feedback. Set it to `false` before your final render.
 
 ## 🎛️ Parameters
+
+### Preset
+
+| Parameter | Description | Default |
+| :--- | :--- | :--- |
+| `preset` | Hair type preset (0=Custom, 1=Fine, 2=Normal, 3=Thick, 4=Curly, 5=Long). | `0` |
 
 ### Quality
 
@@ -76,7 +95,7 @@ Violating this constraint will produce an invalid shape. OpenSCAD will report an
 
 - **Developed by:** Jerry van Heerikhuize
 - **Email:** [jvanheerikhuize@gmail.com](mailto:jvanheerikhuize@gmail.com)
-- **Version:** 1.0.0
+- **Version:** 1.1.0
 - **Last Modified:** 03/03/26
 
 ## ⚖️ License

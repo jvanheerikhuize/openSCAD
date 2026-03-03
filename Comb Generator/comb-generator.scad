@@ -11,7 +11,7 @@
 
 	-----------------------------------------------------------------------------
 
-	Version:                1.0.0
+	Version:                1.1.0
 	Creation Date:          03/03/26
 	Modification Date:      03/03/26
 	Email:                  jvanheerikhuize@gmail.com
@@ -39,6 +39,10 @@ show_cross_section = false; //[true:false]
 	CONFIGURATION
 
 \*#################################################################################*/
+
+/* [Preset:] */
+// Select a preset hair type, or choose Custom to configure all values manually below
+preset = 0; //[0:Custom, 1:Fine / Thin, 2:Normal / Straight, 3:Thick / Coarse, 4:Curly / Wavy, 5:Long / Detangling]
 
 /* [Comb:] */
 // Thickness of the comb (Z height)
@@ -95,13 +99,32 @@ $fs = preview_mode ? 0.5 : 0.1;
 // without introducing visible geometry or affecting the final model dimensions.
 eps = 0.00001;
 
+// Preset data: [comb_thickness, spine_width, tooth_length, tooth_width, tooth_gap, num_teeth]
+preset_data = [
+	[3.0, 15, 25, 1.5, 1.5, 45],  // 0: Custom  (fallback — not used when preset == 0)
+	[2.5, 12, 20, 1.0, 1.0, 55],  // 1: Fine / Thin
+	[3.0, 15, 25, 1.5, 1.5, 45],  // 2: Normal / Straight
+	[3.5, 18, 30, 2.0, 3.0, 25],  // 3: Thick / Coarse
+	[3.5, 18, 40, 3.0, 6.0, 12],  // 4: Curly / Wavy
+	[3.0, 15, 50, 2.0, 4.0, 20],  // 5: Long / Detangling
+];
+
+// Effective values — preset overrides manual config when preset != 0
+eff_comb_thickness = preset == 0 ? comb_thickness : preset_data[preset][0];
+eff_spine_width    = preset == 0 ? spine_width    : preset_data[preset][1];
+eff_tooth_length   = preset == 0 ? tooth_length   : preset_data[preset][2];
+eff_tooth_width    = preset == 0 ? tooth_width    : preset_data[preset][3];
+eff_tooth_gap      = preset == 0 ? tooth_gap      : preset_data[preset][4];
+eff_num_teeth      = preset == 0 ? num_teeth      : preset_data[preset][5];
+
 // ── Derived values ────────────────────────────────────────────────────────────
 // Solid margin at each end of the spine beyond the tooth array
 end_margin = 2;
 // Total physical length of the comb
-comb_length = (num_teeth * tooth_width) + ((num_teeth - 1) * tooth_gap) + (end_margin * 2);
+comb_length = (eff_num_teeth * eff_tooth_width) + ((eff_num_teeth - 1) * eff_tooth_gap) + (end_margin * 2);
 
 // ── Assertions ────────────────────────────────────────────────────────────────
+assert(preset        >= 0 && preset <= 5, "preset must be between 0 and 5");
 assert(comb_thickness > 0,  "comb_thickness must be positive");
 assert(spine_width    > 0,  "spine_width must be positive");
 assert(tooth_length   > 0,  "tooth_length must be positive");
@@ -110,7 +133,7 @@ assert(tooth_gap      > 0,  "tooth_gap must be positive");
 assert(num_teeth      >= 1, "num_teeth must be at least 1");
 assert(stamp_depth    > 0,  "stamp_depth must be positive");
 assert(
-	stamp_depth < comb_thickness,
+	stamp_depth < eff_comb_thickness,
 	"stamp_depth must be less than comb_thickness"
 );
 assert(svg_scale      > 0,  "svg_scale must be positive");
@@ -132,8 +155,8 @@ module assemble() {
 		// tooth and spine profile when viewed from the front
 		intersection() {
 			build();
-			translate([-comb_length / 2, -spine_width / 2, -1])
-				cube([comb_length, spine_width / 2, comb_thickness + tooth_length + 2]);
+			translate([-comb_length / 2, -eff_spine_width / 2, -1])
+				cube([comb_length, eff_spine_width / 2, eff_comb_thickness + eff_tooth_length + 2]);
 		}
 	} else {
 		build();
@@ -142,11 +165,11 @@ module assemble() {
 
 // Renders the comb body with the personalization stamp subtracted
 module build() {
-	translate([-comb_length / 2, -spine_width / 2, 0]) {
+	translate([-comb_length / 2, -eff_spine_width / 2, 0]) {
 		difference() {
 			comb_body();
 			// Keep the stamp perfectly centred relative to the dynamic length
-			translate([comb_length / 2, spine_width / 2, comb_thickness - stamp_depth + 0.01])
+			translate([comb_length / 2, eff_spine_width / 2, eff_comb_thickness - stamp_depth + 0.01])
 				personalization_stamp();
 		}
 	}
@@ -162,16 +185,16 @@ module build() {
 // Generates the comb spine with rounded ends and all teeth attached
 module comb_body() {
 	// Spine: rounded rectangle spanning the full comb length
-	rounded_rect(comb_length, spine_width, comb_thickness, 2);
+	rounded_rect(comb_length, eff_spine_width, eff_comb_thickness, 2);
 
 	// Teeth: array of slightly tapered rectangular extrusions
-	for (i = [0 : num_teeth - 1]) {
-		translate([end_margin + i * (tooth_width + tooth_gap), spine_width - 0.5, 0])
+	for (i = [0 : eff_num_teeth - 1]) {
+		translate([end_margin + i * (eff_tooth_width + eff_tooth_gap), eff_spine_width - 0.5, 0])
 		hull() {
-			cube([tooth_width, 1, comb_thickness]);
+			cube([eff_tooth_width, 1, eff_comb_thickness]);
 			// Taper the tooth to a narrower tip
-			translate([tooth_width * 0.25, tooth_length, 0])
-				cube([tooth_width * 0.5, 1, comb_thickness]);
+			translate([eff_tooth_width * 0.25, eff_tooth_length, 0])
+				cube([eff_tooth_width * 0.5, 1, eff_comb_thickness]);
 		}
 	}
 }
