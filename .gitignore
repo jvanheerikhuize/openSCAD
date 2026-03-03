@@ -1,0 +1,23 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+*.code-workspace
+
+# OpenSCAD autosave
+*.scad~
+
+# Exported model files — uncomment to exclude generated outputs from version control
+# *.stl
+# *.amf
+# *.3mf
+# *.dxf
+# *.svg
+# *.png
+# *.csg
