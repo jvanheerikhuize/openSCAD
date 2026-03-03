@@ -1,0 +1,45 @@
+{
+    "parameterSets": {
+        "Fine / Thin": {
+            "comb_thickness": 2.5,
+            "spine_width": 12,
+            "tooth_length": 20,
+            "tooth_width": 1.0,
+            "tooth_gap": 1.0,
+            "num_teeth": 55
+        },
+        "Normal / Straight": {
+            "comb_thickness": 3.0,
+            "spine_width": 15,
+            "tooth_length": 25,
+            "tooth_width": 1.5,
+            "tooth_gap": 1.5,
+            "num_teeth": 45
+        },
+        "Thick / Coarse": {
+            "comb_thickness": 3.5,
+            "spine_width": 18,
+            "tooth_length": 30,
+            "tooth_width": 2.0,
+            "tooth_gap": 3.0,
+            "num_teeth": 25
+        },
+        "Curly / Wavy": {
+            "comb_thickness": 3.5,
+            "spine_width": 18,
+            "tooth_length": 40,
+            "tooth_width": 3.0,
+            "tooth_gap": 6.0,
+            "num_teeth": 12
+        },
+        "Long / Detangling": {
+            "comb_thickness": 3.0,
+            "spine_width": 15,
+            "tooth_length": 50,
+            "tooth_width": 2.0,
+            "tooth_gap": 4.0,
+            "num_teeth": 20
+        }
+    },
+    "fileFormatVersion": "1"
+}

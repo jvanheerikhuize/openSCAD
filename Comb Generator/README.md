@@ -13,16 +13,40 @@ A fully parametric 3D comb generator. Adjust the spine, teeth count, spacing, an
 
 ## 💇 Hair Type Presets
 
-Quickly generate combs optimized for different hair types without manually tweaking parameters:
+Five presets are included, optimized for different hair types and textures:
 
 | Preset | tooth_width | tooth_gap | tooth_length | num_teeth | Best For |
 | :--- | ---: | ---: | ---: | ---: | :--- |
-| **Custom** | _(manual)_ | _(manual)_ | _(manual)_ | _(manual)_ | Full control over all parameters |
 | **Fine / Thin** | 1.0 mm | 1.0 mm | 20 mm | 55 | Fine, delicate hair that needs gentle styling |
 | **Normal / Straight** | 1.5 mm | 1.5 mm | 25 mm | 45 | Everyday use; balanced geometry |
 | **Thick / Coarse** | 2.0 mm | 3.0 mm | 30 mm | 25 | Dense, coarse hair that needs wider spacing |
 | **Curly / Wavy** | 3.0 mm | 6.0 mm | 40 mm | 12 | Curls and waves; wide-tooth detangling comb |
 | **Long / Detangling** | 2.0 mm | 4.0 mm | 50 mm | 20 | Long hair; extra-long teeth for deep detangling |
+
+### Loading a Preset
+
+Presets are stored in `comb-generator.json` and loaded directly from OpenSCAD's Customizer:
+
+1. Open `comb-generator.scad` in OpenSCAD
+2. Open the **Customizer** panel if not already visible
+3. Click the **dropdown menu** above the parameter list (shows "default" initially)
+4. Select a preset name from the list (e.g., "Curly / Wavy")
+5. All parameters update instantly — press **F6** to render
+
+### Command-Line Usage
+
+You can also render presets from the command line using OpenSCAD's `-P` flag:
+
+```bash
+openscad -p comb-generator.json -P "Curly / Wavy" -o curly_comb.stl comb-generator.scad
+```
+
+Available preset names:
+- `Fine / Thin`
+- `Normal / Straight`
+- `Thick / Coarse`
+- `Curly / Wavy`
+- `Long / Detangling`
 
 ## 🚀 How to Use
 
@@ -35,12 +59,6 @@ Quickly generate combs optimized for different hair types without manually tweak
 > **Tip:** Keep `preview_mode = true` while designing for faster feedback. Set it to `false` before your final render.
 
 ## 🎛️ Parameters
-
-### Preset
-
-| Parameter | Description | Default |
-| :--- | :--- | :--- |
-| `preset` | Hair type preset (0=Custom, 1=Fine, 2=Normal, 3=Thick, 4=Curly, 5=Long). | `0` |
 
 ### Quality
 
@@ -95,7 +113,7 @@ Violating this constraint will produce an invalid shape. OpenSCAD will report an
 
 - **Developed by:** Jerry van Heerikhuize
 - **Email:** [jvanheerikhuize@gmail.com](mailto:jvanheerikhuize@gmail.com)
-- **Version:** 1.1.0
+- **Version:** 1.2.0
 - **Last Modified:** 03/03/26
 
 ## ⚖️ License
