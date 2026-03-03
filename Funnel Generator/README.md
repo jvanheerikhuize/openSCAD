@@ -12,6 +12,43 @@ A fully parametric 3D funnel generator. Adjust the bowl, stem, handles, drip gua
 - **Cross-section view** — slice the model in half to inspect wall thickness and internal geometry
 - **Full parameter validation** — assertions catch invalid configurations before rendering
 
+## 🪣 Presets
+
+Five use-case presets are included for common funnel applications:
+
+| Preset | Bowl Radius | Stem Height | Best For |
+| :--- | ---: | ---: | :--- |
+| **Kitchen** | 50 mm | 50 mm | Standard kitchen use; pouring liquids into containers |
+| **Oil / Automotive** | 70 mm | 60 mm | Large-volume fluids; oil changes, transmission fluid |
+| **Mini / Spice** | 20 mm | 25 mm | Spice jars, small bottles; no handles for compact storage |
+| **Decorative / Hex** | 45 mm | 40 mm | Hexagonal shape for aesthetic appeal; decorative or art projects |
+| **Lab / Precision** | 35 mm | 70 mm | Precise pouring; laboratory use; no handles for clean design |
+
+### Loading a Preset
+
+Presets are stored in `funnel_generator.json` and loaded directly from OpenSCAD's Customizer:
+
+1. Open `funnel_generator.scad` in OpenSCAD
+2. Open the **Customizer** panel if not already visible
+3. Click the **dropdown menu** above the parameter list (shows "default" initially)
+4. Select a preset name from the list (e.g., "Oil / Automotive")
+5. All parameters update instantly — press **F6** to render
+
+### Command-Line Usage
+
+You can also render presets from the command line using OpenSCAD's `-P` flag:
+
+```bash
+openscad -p funnel_generator.json -P "Mini / Spice" -o spice_funnel.stl funnel_generator.scad
+```
+
+Available preset names:
+- `Kitchen`
+- `Oil / Automotive`
+- `Mini / Spice`
+- `Decorative / Hex`
+- `Lab / Precision`
+
 ## 🚀 How to Use
 
 1. Download and install [OpenSCAD](https://openscad.org/) if you don't have it.
