@@ -1,0 +1,285 @@
+solid example_bracket
+
+  # Base platform (20x20x5 mm rectangular block)
+  # Bottom face
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 0 0
+      vertex 20 0 0
+      vertex 20 20 0
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 0 0
+      vertex 20 20 0
+      vertex 0 20 0
+    endloop
+  endfacet
+
+  # Top face
+  facet normal 0 0 1
+    outer loop
+      vertex 0 0 5
+      vertex 20 20 5
+      vertex 20 0 5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 0 0 5
+      vertex 0 20 5
+      vertex 20 20 5
+    endloop
+  endfacet
+
+  # Front face (y=0)
+  facet normal 0 -1 0
+    outer loop
+      vertex 0 0 0
+      vertex 20 0 0
+      vertex 20 0 5
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 0 0 0
+      vertex 20 0 5
+      vertex 0 0 5
+    endloop
+  endfacet
+
+  # Back face (y=20)
+  facet normal 0 1 0
+    outer loop
+      vertex 0 20 0
+      vertex 20 20 5
+      vertex 20 20 0
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 0 20 0
+      vertex 0 20 5
+      vertex 20 20 5
+    endloop
+  endfacet
+
+  # Left face (x=0)
+  facet normal -1 0 0
+    outer loop
+      vertex 0 0 0
+      vertex 0 20 0
+      vertex 0 20 5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 0 0 0
+      vertex 0 20 5
+      vertex 0 0 5
+    endloop
+  endfacet
+
+  # Right face (x=20)
+  facet normal 1 0 0
+    outer loop
+      vertex 20 0 0
+      vertex 20 20 5
+      vertex 20 20 0
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 20 0 0
+      vertex 20 0 5
+      vertex 20 20 5
+    endloop
+  endfacet
+
+  # Vertical post (8x8 mm, height 20 mm, positioned at center of base)
+  # Post base vertices (center at 10, 10)
+  # Base of post (z=5)
+  # Top of post (z=25)
+
+  # Front face of post (y=6)
+  facet normal 0 -1 0
+    outer loop
+      vertex 6 6 5
+      vertex 14 6 5
+      vertex 14 6 25
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 6 6 5
+      vertex 14 6 25
+      vertex 6 6 25
+    endloop
+  endfacet
+
+  # Back face of post (y=14)
+  facet normal 0 1 0
+    outer loop
+      vertex 6 14 5
+      vertex 14 14 25
+      vertex 14 14 5
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 6 14 5
+      vertex 6 14 25
+      vertex 14 14 25
+    endloop
+  endfacet
+
+  # Left face of post (x=6)
+  facet normal -1 0 0
+    outer loop
+      vertex 6 6 5
+      vertex 6 14 5
+      vertex 6 14 25
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 6 6 5
+      vertex 6 14 25
+      vertex 6 6 25
+    endloop
+  endfacet
+
+  # Right face of post (x=14)
+  facet normal 1 0 0
+    outer loop
+      vertex 14 6 5
+      vertex 14 14 25
+      vertex 14 14 5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 14 6 5
+      vertex 14 6 25
+      vertex 14 14 25
+    endloop
+  endfacet
+
+  # Top of post (z=25)
+  facet normal 0 0 1
+    outer loop
+      vertex 6 6 25
+      vertex 14 14 25
+      vertex 14 6 25
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 6 6 25
+      vertex 6 14 25
+      vertex 14 14 25
+    endloop
+  endfacet
+
+  # Mounting plate on top of post (12x12 mm, 3 mm thick)
+  # Base of plate (z=25), top of plate (z=28)
+  # Centered at (10, 10)
+
+  # Bottom face of plate (z=25)
+  facet normal 0 0 -1
+    outer loop
+      vertex 4 4 25
+      vertex 16 4 25
+      vertex 16 16 25
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 4 4 25
+      vertex 16 16 25
+      vertex 4 16 25
+    endloop
+  endfacet
+
+  # Top face of plate (z=28)
+  facet normal 0 0 1
+    outer loop
+      vertex 4 4 28
+      vertex 16 16 28
+      vertex 16 4 28
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 4 4 28
+      vertex 4 16 28
+      vertex 16 16 28
+    endloop
+  endfacet
+
+  # Front face of plate (y=4)
+  facet normal 0 -1 0
+    outer loop
+      vertex 4 4 25
+      vertex 16 4 25
+      vertex 16 4 28
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex 4 4 25
+      vertex 16 4 28
+      vertex 4 4 28
+    endloop
+  endfacet
+
+  # Back face of plate (y=16)
+  facet normal 0 1 0
+    outer loop
+      vertex 4 16 25
+      vertex 16 16 28
+      vertex 16 16 25
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 4 16 25
+      vertex 4 16 28
+      vertex 16 16 28
+    endloop
+  endfacet
+
+  # Left face of plate (x=4)
+  facet normal -1 0 0
+    outer loop
+      vertex 4 4 25
+      vertex 4 16 25
+      vertex 4 16 28
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 4 4 25
+      vertex 4 16 28
+      vertex 4 4 28
+    endloop
+  endfacet
+
+  # Right face of plate (x=16)
+  facet normal 1 0 0
+    outer loop
+      vertex 16 4 25
+      vertex 16 16 28
+      vertex 16 16 25
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 16 4 25
+      vertex 16 4 28
+      vertex 16 16 28
+    endloop
+  endfacet
+
+endsolid example_bracket

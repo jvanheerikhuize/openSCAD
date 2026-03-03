@@ -15,6 +15,27 @@ You provide an STL file and this script builds a two-part, 3D-printable mold aro
 - **Preview and render quality** — toggle between fast preview and high-quality final render
 - **Cross-section view** — slice both halves to inspect cavity geometry
 
+## 📦 Example Part
+
+An example STL file is included in this folder: **`example_part.stl`**
+
+This is a simple mechanical bracket with multiple features:
+- **Base platform** — 20×20×5 mm rectangular block
+- **Vertical post** — 8×8 mm, 20 mm tall
+- **Mounting plate** — 12×12 mm, 3 mm thick on top
+
+### Quick Start with Example
+
+1. Open `mold_generator.scad` in OpenSCAD
+2. Open the **Customizer** panel
+3. Set `object_file = "example_part.stl"`
+4. Set `object_preview = true` to see the part
+5. Adjust mold dimensions if needed (default 75×70×23 mm works well)
+6. Set `object_preview = false` and press **F6** to render
+7. Comment/uncomment `mold_a();` and `mold_b();` in the `build()` function to export each half separately
+
+This example demonstrates how the mold generator handles objects with varying geometry and multiple levels.
+
 ## 🚀 How to Use
 
 This script requires an existing STL file to work.
