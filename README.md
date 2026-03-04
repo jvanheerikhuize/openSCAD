@@ -4,17 +4,21 @@ A collection of fully parametric OpenSCAD generators for 3D-printable objects. E
 
 ## Generators
 
-### 🔧 [Funnel Generator](Funnel%20Generator/)
+### 🔧 [Funnel Generator](Funnel%20Generator/) v1.2.0
 
 Create a customizable funnel with a bowl, tapered stem, optional handles, drip guard, and support for flat-sided (polygonal) profiles.
 
-### 🖨️ [Mold Generator](Mold%20Generator/)
+### 🖨️ [Mold Generator](Mold%20Generator/) v2.0.0
 
 Turn any STL file into a two-part block mold, complete with registration marks and a pouring hole.
 
-### 🎨 [Stencil Generator](Stencil%20Generator/)
+### 🎨 [Stencil Generator](Stencil%20Generator/) v1.0.0
 
 Convert any SVG file into a rigid, 3D-printable stencil plate.
+
+### 🪮 [Comb Generator](comb-generator.scad) v1.2.0
+
+Design parametric 3D combs with customizable tooth profiles, including 5 professional hair-type presets. Add personalized text or SVG engravings.
 
 ## Requirements
 
