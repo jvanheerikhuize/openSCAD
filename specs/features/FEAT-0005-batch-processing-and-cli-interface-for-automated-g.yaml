@@ -1,0 +1,39 @@
+metadata:
+  id: FEAT-0005
+  title: Batch processing and CLI interface for automated generation
+  version: 1.0.0
+  status: draft
+  priority: low
+  author: RSI Audit Agent
+  created_at: "2026-04-03"
+  updated_at: "2026-04-03"
+  tags:
+    - rsi-audit
+    - feature_ideas
+    - feature
+description:
+  summary: 'Automated audit finding: Batch processing and CLI interface for automated generation'
+  problem_statement: '- Based on web research showing growing interest in OpenSCAD automation, the project would benefit from a command-line interface that can generate multiple variants from JSON configuration files. This would enable batch processing for production runs or parametric studies.'
+  proposed_solution: '- Create a Python or shell script that can invoke OpenSCAD with different parameter sets from the existing JSON files. Add support for generating multiple STLs in batch mode with automated naming based on parameters.'
+  out_of_scope:
+    - Changes unrelated to the identified findings
+  dependencies: []
+technical_requirements:
+  constraints: []
+  security: []
+acceptance_criteria:
+  - id: AC-001
+    given: The All generators file(s) exist in the repository
+    when: The changes from this spec are applied
+    then: Create a Python or shell script that can invoke OpenSCAD with different parameter sets from the existing JSON files. Add support for generating multiple STLs in batch mode with automated naming based on parameters.
+technical_notes: 'Files affected: All generators'
+testing_requirements:
+  unit_tests: true
+  integration_tests: false
+  e2e_tests: false
+  performance_tests: false
+  test_scenarios:
+    - Verify the fix addresses the identified issue
+rollout:
+  rollout_strategy: manual
+  rollback_plan: Revert the changes introduced by this spec via git revert.
