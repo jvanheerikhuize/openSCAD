@@ -11,7 +11,7 @@
 
 	-----------------------------------------------------------------------------
 
-	Version:                1.5.0
+	Version:                1.6.0
 	Creation Date:          25/01/25
 	Modification Date:      07/04/26
 	Email:                  jvanheerikhuize@gmail.com
@@ -65,6 +65,8 @@ bevel_depth = 1; //[0.2:0.1:10]
 plate_border = 10; //[0:50]
 // Thickness of the stencil plate along the Z-axis, in mm
 plate_depth = 3; //[1:20]
+// Radius of the rounded corners on the plate. 0 = sharp corners.
+plate_corner_radius = 2; //[0:0.5:20]
 
 /* [Model Scale:] */
 // Uniform scale applied to the entire assembled model (plate, cutout, handles, marks).
@@ -130,12 +132,21 @@ assert(bevel_depth        < plate_depth, "bevel_depth must be less than plate_de
 assert(model_scale        > 0,  "model_scale must be positive");
 assert(plate_border       >= 0, "plate_border must be zero or positive");
 assert(plate_depth        > 0,  "plate_depth must be positive");
+assert(plate_corner_radius >= 0, "plate_corner_radius must be zero or positive");
+assert(
+    plate_corner_radius <= min(plate_width, plate_length) / 2,
+    "plate_corner_radius must not exceed half the smallest plate dimension"
+);
 assert(handle_width       > 0,  "handle_width must be positive");
 assert(handle_length      > 0,  "handle_length must be positive");
 assert(handle_overlap     >= 0, "handle_overlap must be zero or positive");
 assert(reg_mark_size      > 0,  "reg_mark_size must be positive");
 assert(reg_mark_width     > 0,  "reg_mark_width must be positive");
 assert(reg_mark_inset     > 0,  "reg_mark_inset must be positive");
+assert(
+    !show_registration_marks || reg_mark_inset > plate_corner_radius,
+    "reg_mark_inset must be greater than plate_corner_radius to avoid marks landing outside rounded corners"
+);
 assert(
     !show_registration_marks || reg_mark_inset + reg_mark_size / 2 < plate_width  / 2,
     "registration mark extends beyond plate width — reduce reg_mark_size or reg_mark_inset"
@@ -196,9 +207,19 @@ module build() {
 
 \*#################################################################################*/
 
-// Flat rectangular plate that forms the stencil body
+// Flat plate that forms the stencil body, with optional rounded corners
 module stencil_plate() {
-    cube([plate_width, plate_length, plate_depth], center = true);
+    if (plate_corner_radius > 0) {
+        r = plate_corner_radius;
+        hull() {
+            for (x = [-plate_width/2 + r, plate_width/2 - r])
+                for (y = [-plate_length/2 + r, plate_length/2 - r])
+                    translate([x, y, -plate_depth/2])
+                        cylinder(h = plate_depth, r = r);
+        }
+    } else {
+        cube([plate_width, plate_length, plate_depth], center = true);
+    }
 }
 
 
