@@ -11,7 +11,7 @@
 
 	-----------------------------------------------------------------------------
 
-	Version:                1.6.0
+	Version:                1.7.0
 	Creation Date:          25/01/25
 	Modification Date:      07/04/26
 	Email:                  jvanheerikhuize@gmail.com
@@ -84,6 +84,10 @@ handle_width = 30; //[5:100]
 handle_length = 40; //[5:200]
 // How far the handle overlaps into the plate edge to ensure a watertight union
 handle_overlap = 1; //[0:10]
+// Cut a circular finger hole through each enabled handle
+show_handle_grip = false; //[true:false]
+// Diameter of the circular grip hole, in mm
+handle_grip_diameter = 15; //[5:50]
 
 /* [Registration Marks:] */
 // Cut crosshair alignment marks into all four corners of the plate
@@ -140,6 +144,15 @@ assert(
 assert(handle_width       > 0,  "handle_width must be positive");
 assert(handle_length      > 0,  "handle_length must be positive");
 assert(handle_overlap     >= 0, "handle_overlap must be zero or positive");
+assert(handle_grip_diameter > 0,  "handle_grip_diameter must be positive");
+assert(
+    !show_handle_grip || handle_grip_diameter < handle_width,
+    "handle_grip_diameter must be less than handle_width"
+);
+assert(
+    !show_handle_grip || handle_grip_diameter < handle_length,
+    "handle_grip_diameter must be less than handle_length"
+);
 assert(reg_mark_size      > 0,  "reg_mark_size must be positive");
 assert(reg_mark_width     > 0,  "reg_mark_width must be positive");
 assert(reg_mark_inset     > 0,  "reg_mark_inset must be positive");
@@ -197,6 +210,8 @@ module build() {
         }
         svg_cutout();
         if (show_registration_marks) registration_marks();
+        if (show_handle_grip && show_handle_1) handle_grip(1);
+        if (show_handle_grip && show_handle_2) handle_grip(-1);
     }
 }
 
@@ -242,6 +257,16 @@ module handle(side) {
         -plate_depth / 2
     ])
         cube([handle_width, handle_length + handle_overlap, plate_depth]);
+}
+
+// Circular grip hole centred on a handle tab.
+// side = +1 for positive-Y handle, -1 for negative-Y handle.
+module handle_grip(side) {
+    cy = side == 1
+        ? plate_length / 2 + handle_length / 2
+        : -(plate_length / 2 + handle_length / 2);
+    translate([0, cy, 0])
+        cylinder(h = plate_depth + 2, d = handle_grip_diameter, center = true);
 }
 
 
