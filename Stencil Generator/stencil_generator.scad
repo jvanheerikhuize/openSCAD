@@ -173,8 +173,8 @@ module build() {
     difference() {
         union() {
             stencil_plate();
-            if (show_handle_1) handle_1();
-            if (show_handle_2) handle_2();
+            if (show_handle_1) handle(1);
+            if (show_handle_2) handle(-1);
         }
         svg_cutout();
         if (show_registration_marks) registration_marks();
@@ -200,22 +200,16 @@ module stencil_plate() {
 
 \*#################################################################################*/
 
-// Handle 1: a flat tab extending outward from the positive-Y plate edge.
+// A flat tab extending outward from the plate edge.
+// side = +1 for positive-Y, -1 for negative-Y.
 // Overlaps the plate by `handle_overlap` mm to ensure a watertight union.
-module handle_1() {
+module handle(side) {
+    y_offset = side == 1
+        ? plate_length / 2 - handle_overlap
+        : -(plate_length / 2 + handle_length);
     translate([
         -handle_width / 2,
-        plate_length / 2 - handle_overlap,
-        -plate_depth / 2
-    ])
-        cube([handle_width, handle_length + handle_overlap, plate_depth]);
-}
-
-// Handle 2: a flat tab on the negative-Y side, placed symmetrically opposite handle 1.
-module handle_2() {
-    translate([
-        -handle_width / 2,
-        -(plate_length / 2 + handle_length),
+        y_offset,
         -plate_depth / 2
     ])
         cube([handle_width, handle_length + handle_overlap, plate_depth]);
