@@ -12,11 +12,11 @@ Create a customizable funnel with a bowl, tapered stem, optional handles, drip g
 
 Turn any STL file into a two-part block mold, complete with registration marks and a pouring hole.
 
-### 🎨 [Stencil Generator](Stencil%20Generator/) v1.0.0
+### 🎨 [Stencil Generator](Stencil%20Generator/) v1.7.0
 
-Convert any SVG file into a rigid, 3D-printable stencil plate.
+Convert any SVG into a 3D-printable stencil with auto-sizing plate, beveled cut edges, rounded corners, handle grip holes, registration marks, and dual scaling (design + model).
 
-### 🪮 [Comb Generator](comb-generator.scad) v1.2.0
+### 🪮 [Comb Generator](Comb%20Generator/) v1.2.0
 
 Design parametric 3D combs with customizable tooth profiles, including 5 professional hair-type presets. Add personalized text or SVG engravings.
 
