@@ -42,7 +42,7 @@ show_cross_section = false; //[true:false]
 
 /* [SVG File:] */
 // Filename of the SVG to import — must be in the same folder as this .scad file
-svg_file = "_skull.svg";
+svg_file = "bee_stencil.svg";
 // Native width of the SVG artwork as imported by OpenSCAD, in mm.
 // To find this value: import your SVG with design_scale=1 and measure it in the OpenSCAD viewport,
 // or check Document Properties in Inkscape (divide pixel value by 3.7795 to convert to mm).

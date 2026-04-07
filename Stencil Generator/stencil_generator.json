@@ -1,7 +1,7 @@
 {
     "parameterSets": {
         "Standard": {
-            "svg_file": "_skull.svg",
+            "svg_file": "bee_stencil.svg",
             "svg_native_width": 100,
             "svg_native_height": 100,
             "design_scale": 1,
@@ -21,7 +21,7 @@
             "reg_mark_inset": 8
         },
         "Large (2x)": {
-            "svg_file": "_skull.svg",
+            "svg_file": "bee_stencil.svg",
             "svg_native_width": 100,
             "svg_native_height": 100,
             "design_scale": 2,
@@ -41,7 +41,7 @@
             "reg_mark_inset": 10
         },
         "Poster (3x)": {
-            "svg_file": "_skull.svg",
+            "svg_file": "bee_stencil.svg",
             "svg_native_width": 100,
             "svg_native_height": 100,
             "design_scale": 3,
@@ -61,7 +61,7 @@
             "reg_mark_inset": 12
         },
         "Mini (0.5x)": {
-            "svg_file": "_skull.svg",
+            "svg_file": "bee_stencil.svg",
             "svg_native_width": 100,
             "svg_native_height": 100,
             "design_scale": 0.5,
@@ -81,7 +81,7 @@
             "reg_mark_inset": 5
         },
         "Tight Border": {
-            "svg_file": "_skull.svg",
+            "svg_file": "bee_stencil.svg",
             "svg_native_width": 100,
             "svg_native_height": 100,
             "design_scale": 1,
