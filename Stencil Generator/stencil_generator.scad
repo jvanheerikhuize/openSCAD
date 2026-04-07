@@ -11,7 +11,7 @@
 
 	-----------------------------------------------------------------------------
 
-	Version:                1.4.0
+	Version:                1.5.0
 	Creation Date:          25/01/25
 	Modification Date:      07/04/26
 	Email:                  jvanheerikhuize@gmail.com
@@ -53,6 +53,11 @@ svg_native_height = 100; //[1:999]
 /* [Design:] */
 // Scale factor for the SVG cutout only — the plate auto-sizes around the scaled artwork
 design_scale = 1; //[0.1:0.1:10]
+// How much wider the top (spray-side) opening is than the bottom per side, in mm.
+// Creates a knife-edge at the surface contact side to reduce paint bleed. 0 = vertical walls.
+bevel_width = 0; //[0:0.1:5]
+// Height of the beveled portion measured down from the top face, in mm
+bevel_depth = 1; //[0.2:0.1:10]
 
 /* [Plate:] */
 // Distance between the SVG cutout and the plate edge, in mm.
@@ -119,6 +124,9 @@ assert(len(svg_file)      > 0,  "svg_file must not be empty");
 assert(svg_native_width   > 0,  "svg_native_width must be positive");
 assert(svg_native_height  > 0,  "svg_native_height must be positive");
 assert(design_scale       > 0,  "design_scale must be positive");
+assert(bevel_width        >= 0, "bevel_width must be zero or positive");
+assert(bevel_depth        > 0,  "bevel_depth must be positive");
+assert(bevel_depth        < plate_depth, "bevel_depth must be less than plate_depth");
 assert(model_scale        > 0,  "model_scale must be positive");
 assert(plate_border       >= 0, "plate_border must be zero or positive");
 assert(plate_depth        > 0,  "plate_depth must be positive");
@@ -250,15 +258,32 @@ module registration_marks() {
 
 // Extrudes the SVG artwork through the full plate thickness to create the cutout.
 // Scale is applied to the 2D profile only, keeping the extrusion height exact.
-// The cutout is clipped to the scaled SVG bounding box, so any SVG geometry that
-// overflows its natural canvas boundary cannot cut through the plate border.
-// The extrusion is 2 mm taller than the plate to guarantee a clean boolean cut.
+// The cutout is clipped to the scaled SVG bounding box (expanded by bevel_width),
+// so any SVG geometry that overflows its natural canvas boundary cannot cut through
+// the plate border.
+// When bevel_width > 0, a stepped bevel widens the top (spray-side) opening,
+// creating a knife-edge at the bottom (surface-contact) side to reduce paint bleed.
 module svg_cutout() {
     intersection() {
-        cube([scaled_svg_width, scaled_svg_height, plate_depth + 2], center = true);
-        linear_extrude(height = plate_depth + 2, center = true, convexity = 100) {
-            scale([design_scale, design_scale]) {
-                import(svg_file, center = true);
+        cube([
+            scaled_svg_width + 2 * bevel_width,
+            scaled_svg_height + 2 * bevel_width,
+            plate_depth + 2
+        ], center = true);
+
+        union() {
+            // Full-depth cut at exact SVG size (knife-edge at bottom)
+            linear_extrude(height = plate_depth + 2, center = true, convexity = 100)
+                scale([design_scale, design_scale])
+                    import(svg_file, center = true);
+
+            // Top-side bevel: wider cut, partial depth
+            if (bevel_width > 0) {
+                translate([0, 0, (plate_depth / 2) - bevel_depth])
+                    linear_extrude(height = bevel_depth + 1, convexity = 100)
+                        offset(delta = bevel_width)
+                            scale([design_scale, design_scale])
+                                import(svg_file, center = true);
             }
         }
     }
