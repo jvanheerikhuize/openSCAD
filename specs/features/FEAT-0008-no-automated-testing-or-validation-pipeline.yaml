@@ -1,0 +1,47 @@
+metadata:
+  id: FEAT-0008
+  title: No automated testing or validation pipeline
+  version: 1.0.0
+  status: draft
+  priority: medium
+  author: RSI Audit Agent
+  created_at: "2026-04-07"
+  updated_at: "2026-04-07"
+  tags:
+    - rsi-audit
+    - non_functional
+    - maintainability
+description:
+  summary: 'Automated audit finding: No automated testing or validation pipeline'
+  problem_statement: |-
+    - The repository has a specs/ directory with feature specs but no automated testing to verify that generators produce valid STL outputs or handle edge cases correctly. Changes to core algorithms could break existing functionality without detection.
+    - File naming is inconsistent: 'comb-generator.scad' uses hyphens while 'funnel_generator.scad' uses underscores. Directory naming also varies. This makes the project appear less professional and can cause confusion when scripting or batch processing.
+  proposed_solution: |-
+    - Implement automated testing using OpenSCAD's command-line interface to render test cases and validate outputs. Create a CI pipeline that tests parameter combinations and checks for rendering errors or degenerate geometry.
+    - Standardize on either snake_case or kebab-case for all files and directories. Update the main README and any references accordingly. Consider using snake_case to match OpenSCAD community conventions.
+  out_of_scope:
+    - Changes unrelated to the identified findings
+  dependencies: []
+technical_requirements:
+  constraints: []
+  security: []
+acceptance_criteria:
+  - id: AC-001
+    given: The specs/features/FEAT-0001-no-automated-testing-or-validation-for-generated-m.yaml file(s) exist in the repository
+    when: The changes from this spec are applied
+    then: Implement automated testing using OpenSCAD's command-line interface to render test cases and validate outputs. Create a CI pipeline that tests parameter combinations and checks for rendering errors or degenerate geometry.
+  - id: AC-002
+    given: The Comb Generator/comb-generator.scad file(s) exist in the repository
+    when: The changes from this spec are applied
+    then: Standardize on either snake_case or kebab-case for all files and directories. Update the main README and any references accordingly. Consider using snake_case to match OpenSCAD community conventions.
+technical_notes: 'Files affected: Comb Generator/comb-generator.scad, Funnel Generator/funnel_generator.scad, specs/features/FEAT-0001-no-automated-testing-or-validation-for-generated-m.yaml'
+testing_requirements:
+  unit_tests: true
+  integration_tests: false
+  e2e_tests: false
+  performance_tests: false
+  test_scenarios:
+    - Verify the fix addresses the identified issue
+rollout:
+  rollout_strategy: manual
+  rollback_plan: Revert the changes introduced by this spec via git revert.

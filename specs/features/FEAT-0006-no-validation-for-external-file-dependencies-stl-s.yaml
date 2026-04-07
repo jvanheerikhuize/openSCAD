@@ -1,0 +1,39 @@
+metadata:
+  id: FEAT-0006
+  title: No validation for external file dependencies (STL/SVG)
+  version: 1.0.0
+  status: draft
+  priority: high
+  author: RSI Audit Agent
+  created_at: "2026-04-07"
+  updated_at: "2026-04-07"
+  tags:
+    - rsi-audit
+    - functional
+    - bug
+description:
+  summary: 'Automated audit finding: No validation for external file dependencies (STL/SVG)'
+  problem_statement: '- Mold Generator and Stencil Generator rely on external STL and SVG files (_skull.stl, _skull.svg) but provide no validation that these files exist, are readable, or contain valid data. OpenSCAD will silently fail or produce unexpected results when files are missing or corrupted, making debugging difficult for users.'
+  proposed_solution: '- Add file existence checks and error handling. Use OpenSCAD''s echo() statements to validate file paths and provide clear error messages when dependencies are missing. Consider bundling sample files or providing download instructions.'
+  out_of_scope:
+    - Changes unrelated to the identified findings
+  dependencies: []
+technical_requirements:
+  constraints: []
+  security: []
+acceptance_criteria:
+  - id: AC-001
+    given: The Mold Generator/mold_generator.scad file(s) exist in the repository
+    when: The changes from this spec are applied
+    then: Add file existence checks and error handling. Use OpenSCAD's echo() statements to validate file paths and provide clear error messages when dependencies are missing. Consider bundling sample files or providing download instructions.
+technical_notes: 'Files affected: Mold Generator/mold_generator.scad, Stencil Generator/stencil_generator.scad'
+testing_requirements:
+  unit_tests: true
+  integration_tests: false
+  e2e_tests: false
+  performance_tests: false
+  test_scenarios:
+    - Verify the fix addresses the identified issue
+rollout:
+  rollout_strategy: manual
+  rollback_plan: Revert the changes introduced by this spec via git revert.
