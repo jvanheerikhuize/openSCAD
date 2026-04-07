@@ -11,9 +11,9 @@
 
 	-----------------------------------------------------------------------------
 
-	Version:                1.3.0
+	Version:                1.4.0
 	Creation Date:          25/01/25
-	Modification Date:      07/03/26
+	Modification Date:      07/04/26
 	Email:                  jvanheerikhuize@gmail.com
 	Description:            Customizable stencil generator for OpenSCAD
 	Dependencies:           none
@@ -40,24 +40,31 @@ show_cross_section = false; //[true:false]
 
 \*#################################################################################*/
 
-/* [SVG:] */
+/* [SVG File:] */
 // Filename of the SVG to import — must be in the same folder as this .scad file
 svg_file = "_skull.svg";
-// Natural width of the SVG artwork as imported by OpenSCAD, in mm.
-// To find this value: import your SVG with svg_scale=1 and measure it in the OpenSCAD viewport,
+// Native width of the SVG artwork as imported by OpenSCAD, in mm.
+// To find this value: import your SVG with design_scale=1 and measure it in the OpenSCAD viewport,
 // or check Document Properties in Inkscape (divide pixel value by 3.7795 to convert to mm).
-svg_width = 100; //[1:999]
-// Natural height of the SVG artwork as imported by OpenSCAD, in mm
-svg_height = 100; //[1:999]
-// Uniform scale factor applied to the imported SVG artwork
-svg_scale = 1; //[0.1:0.1:10]
-// Minimum distance between the SVG cutout and the plate edge, in mm.
-// The plate automatically grows by 2 × min_border around the scaled SVG.
-min_border = 10; //[0:50]
+svg_native_width = 100; //[1:999]
+// Native height of the SVG artwork as imported by OpenSCAD, in mm
+svg_native_height = 100; //[1:999]
 
-/* [Stencil Plate:] */
+/* [Design:] */
+// Scale factor for the SVG cutout only — the plate auto-sizes around the scaled artwork
+design_scale = 1; //[0.1:0.1:10]
+
+/* [Plate:] */
+// Distance between the SVG cutout and the plate edge, in mm.
+// The plate automatically grows by 2 × plate_border around the scaled SVG.
+plate_border = 10; //[0:50]
 // Thickness of the stencil plate along the Z-axis, in mm
-stencil_depth = 3; //[1:20]
+plate_depth = 3; //[1:20]
+
+/* [Model Scale:] */
+// Uniform scale applied to the entire assembled model (plate, cutout, handles, marks).
+// Use this to resize the whole stencil proportionally — e.g. 0.5 = half size.
+model_scale = 1; //[0.1:0.1:10]
 
 /* [Handles:] */
 // Enable handle 1 (positive-Y side of the stencil)
@@ -100,29 +107,33 @@ $fa = preview_mode ? 5   : 1;
 $fs = preview_mode ? 0.5 : 0.1;
 
 // ── Derived values ────────────────────────────────────────────────────────────
+// Scaled SVG dimensions
+scaled_svg_width  = svg_native_width  * design_scale;
+scaled_svg_height = svg_native_height * design_scale;
 // Plate dimensions are computed from the scaled SVG plus the border on each side
-stencil_width  = svg_width  * svg_scale + 2 * min_border;
-stencil_length = svg_height * svg_scale + 2 * min_border;
+plate_width  = scaled_svg_width  + 2 * plate_border;
+plate_length = scaled_svg_height + 2 * plate_border;
 
 // ── Assertions ────────────────────────────────────────────────────────────────
-assert(len(svg_file)  > 0,  "svg_file must not be empty");
-assert(svg_width      > 0,  "svg_width must be positive");
-assert(svg_height     > 0,  "svg_height must be positive");
-assert(svg_scale      > 0,  "svg_scale must be positive");
-assert(min_border     >= 0, "min_border must be zero or positive");
-assert(stencil_depth  > 0,  "stencil_depth must be positive");
-assert(handle_width   > 0,  "handle_width must be positive");
-assert(handle_length  > 0,  "handle_length must be positive");
-assert(handle_overlap >= 0, "handle_overlap must be zero or positive");
-assert(reg_mark_size  > 0,  "reg_mark_size must be positive");
-assert(reg_mark_width > 0,  "reg_mark_width must be positive");
-assert(reg_mark_inset > 0,  "reg_mark_inset must be positive");
+assert(len(svg_file)      > 0,  "svg_file must not be empty");
+assert(svg_native_width   > 0,  "svg_native_width must be positive");
+assert(svg_native_height  > 0,  "svg_native_height must be positive");
+assert(design_scale       > 0,  "design_scale must be positive");
+assert(model_scale        > 0,  "model_scale must be positive");
+assert(plate_border       >= 0, "plate_border must be zero or positive");
+assert(plate_depth        > 0,  "plate_depth must be positive");
+assert(handle_width       > 0,  "handle_width must be positive");
+assert(handle_length      > 0,  "handle_length must be positive");
+assert(handle_overlap     >= 0, "handle_overlap must be zero or positive");
+assert(reg_mark_size      > 0,  "reg_mark_size must be positive");
+assert(reg_mark_width     > 0,  "reg_mark_width must be positive");
+assert(reg_mark_inset     > 0,  "reg_mark_inset must be positive");
 assert(
-    !show_registration_marks || reg_mark_inset + reg_mark_size / 2 < stencil_width  / 2,
+    !show_registration_marks || reg_mark_inset + reg_mark_size / 2 < plate_width  / 2,
     "registration mark extends beyond plate width — reduce reg_mark_size or reg_mark_inset"
 );
 assert(
-    !show_registration_marks || reg_mark_inset + reg_mark_size / 2 < stencil_length / 2,
+    !show_registration_marks || reg_mark_inset + reg_mark_size / 2 < plate_length / 2,
     "registration mark extends beyond plate length — reduce reg_mark_size or reg_mark_inset"
 );
 
@@ -133,7 +144,8 @@ assert(
 
 \*#################################################################################*/
 
-assemble();
+scale([model_scale, model_scale, model_scale])
+    assemble();
 
 // Entry point: optionally clips a cross-section, then delegates to build()
 module assemble() {
@@ -144,11 +156,11 @@ module assemble() {
         intersection() {
             build();
             translate([
-                -(stencil_width / 2 + 1),
-                -(stencil_length / 2 + handle_length + 1),
-                -(stencil_depth / 2 + 1)
+                -(plate_width / 2 + 1),
+                -(plate_length / 2 + handle_length + 1),
+                -(plate_depth / 2 + 1)
             ])
-                cube([stencil_width / 2 + 1, stencil_length + 2 * handle_length + 2, stencil_depth + 2]);
+                cube([plate_width / 2 + 1, plate_length + 2 * handle_length + 2, plate_depth + 2]);
         }
     } else {
         build();
@@ -172,13 +184,13 @@ module build() {
 
 /*#################################################################################*\
 
-    STENCIL PLATE
+    PLATE
 
 \*#################################################################################*/
 
 // Flat rectangular plate that forms the stencil body
 module stencil_plate() {
-    cube([stencil_width, stencil_length, stencil_depth], center = true);
+    cube([plate_width, plate_length, plate_depth], center = true);
 }
 
 
@@ -193,20 +205,20 @@ module stencil_plate() {
 module handle_1() {
     translate([
         -handle_width / 2,
-        stencil_length / 2 - handle_overlap,
-        -stencil_depth / 2
+        plate_length / 2 - handle_overlap,
+        -plate_depth / 2
     ])
-        cube([handle_width, handle_length + handle_overlap, stencil_depth]);
+        cube([handle_width, handle_length + handle_overlap, plate_depth]);
 }
 
 // Handle 2: a flat tab on the negative-Y side, placed symmetrically opposite handle 1.
 module handle_2() {
     translate([
         -handle_width / 2,
-        -(stencil_length / 2 + handle_length),
-        -stencil_depth / 2
+        -(plate_length / 2 + handle_length),
+        -plate_depth / 2
     ])
-        cube([handle_width, handle_length + handle_overlap, stencil_depth]);
+        cube([handle_width, handle_length + handle_overlap, plate_depth]);
 }
 
 
@@ -220,17 +232,17 @@ module handle_2() {
 // Each crosshair centre is inset `reg_mark_inset` mm from both edges at that corner.
 module registration_marks() {
     corners = [
-        [ stencil_width / 2 - reg_mark_inset,  stencil_length / 2 - reg_mark_inset],
-        [-stencil_width / 2 + reg_mark_inset,  stencil_length / 2 - reg_mark_inset],
-        [ stencil_width / 2 - reg_mark_inset, -stencil_length / 2 + reg_mark_inset],
-        [-stencil_width / 2 + reg_mark_inset, -stencil_length / 2 + reg_mark_inset],
+        [ plate_width / 2 - reg_mark_inset,  plate_length / 2 - reg_mark_inset],
+        [-plate_width / 2 + reg_mark_inset,  plate_length / 2 - reg_mark_inset],
+        [ plate_width / 2 - reg_mark_inset, -plate_length / 2 + reg_mark_inset],
+        [-plate_width / 2 + reg_mark_inset, -plate_length / 2 + reg_mark_inset],
     ];
     for (c = corners) {
         translate([c[0], c[1], 0]) {
             // Horizontal arm
-            cube([reg_mark_size, reg_mark_width, stencil_depth + 2], center = true);
+            cube([reg_mark_size, reg_mark_width, plate_depth + 2], center = true);
             // Vertical arm
-            cube([reg_mark_width, reg_mark_size, stencil_depth + 2], center = true);
+            cube([reg_mark_width, reg_mark_size, plate_depth + 2], center = true);
         }
     }
 }
@@ -249,9 +261,9 @@ module registration_marks() {
 // The extrusion is 2 mm taller than the plate to guarantee a clean boolean cut.
 module svg_cutout() {
     intersection() {
-        cube([svg_width * svg_scale, svg_height * svg_scale, stencil_depth + 2], center = true);
-        linear_extrude(height = stencil_depth + 2, center = true, convexity = 100) {
-            scale([svg_scale, svg_scale]) {
+        cube([scaled_svg_width, scaled_svg_height, plate_depth + 2], center = true);
+        linear_extrude(height = plate_depth + 2, center = true, convexity = 100) {
+            scale([design_scale, design_scale]) {
                 import(svg_file, center = true);
             }
         }
