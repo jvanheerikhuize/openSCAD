@@ -1,0 +1,34 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OpenSCAD
+*.csg
+*.ast
+*.echo
+openscad_debug.txt
+
+# 3D Model Output
+*.stl
+*.obj
+*.off
+*.dxf
+
+# Generated files
+*.svg
+*.png
+*.pdf
+*.ps
+
+# Customizer
+*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+.claude/worktrees/
