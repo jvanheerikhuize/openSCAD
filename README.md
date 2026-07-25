@@ -36,3 +36,9 @@ Each generator folder contains its own README with a full parameter reference.
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE).
+
+## Roadmap
+
+Parametric generator expansion: CUSTOMIZATION.md per design, more printable objects, integration with stencils repo.
+
+---
